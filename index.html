@@ -55,106 +55,533 @@
 <h1 class="main-title">★クルザス中央高地釣り大会</h1>
 <h2 class="sub-title">～VSバラし女王メイトリアーク～</h2>
 
-  <h2>◆レギュレーション</h2>
-<ul>
-  <li>制限時間は30分</li>
-  <li>
-    制限時間以内に最も多くメイトリアークを釣り上げたPTが優勝<br>
-    <img src="https://i.imgur.com/pWzhMr4.png" alt="メイトリアーク" style="width:50px; margin-top: 0.5em;">
-  </li>
-  <li>釣り上げ成功がわかりやすいように「/sit」コマンドで座った状態で釣りを行う</li>
-  <li>
-    餌はハニーワーム(FC支給)<br>
-    <img src="https://i.imgur.com/VmKc2xS.png" alt="ハニーワーム" style="width:50px; margin-top: 0.5em;">
-  </li>
-  <li>PT人数は参加人数に応じて分けようと考えています。</li>
-</ul>
+  <div class="section">
+    <h2>◆ 目的 ⭐</h2>
+    <ul>
+    <li>「調査隊の氷穴」のヌシ「メイトリアーク」を釣り上げる<br>
+    <img src="メイトリアーク.png" alt="メイトリアーク" style="width:75px; margin-top: 0.5em;">
+    </li>
+  </div>
 
-  <table>
-    <tr>
-      <th>PT人数＼PT数</th>
-      <th>2PT</th>
-      <th>3PT</th>
-      <th>4PT</th>
-      <th>5PT</th>
-      <th>6PT</th>
-    </tr>
-    <tr>
-      <th>2人</th>
-      <td>4名</td>
-      <td>6名</td>
-      <td>8名</td>
-      <td>10名</td>
-      <td>12名</td>
-    </tr>
-    <tr>
-      <th>3人</th>
-      <td>6名</td>
-      <td>9名</td>
-      <td>12名</td>
-      <td>—</td>
-      <td>—</td>
-    </tr>
-  </table>
+  <div class="section">
+    <h2>◆ 参加資格 ✋</h2>
+    <ul>
+      <li>必要漁師レベルはLv50以上</li>
+      <li>必要獲得力はだいたい500以上 (500からはどんなに高くても確率に変動はありません)</li>
+    </ul>
+  </div>
 
-  <p class="note">※参加者がくしくも素数であった場合はholiaさんが参加を諦め責任をもって主催に徹底します。</p>
+  <div class="section">
+    <h2>◆ 勝利条件 👑</h2>
+    <ol>
+      <li>制限時間（30分）以内に最も多く「メイトリアーク」を釣ったチームが勝利となります。</li>
+      <li>制限時間終了後、1匹以上で同スコアだった場合、最も早くそのスコアに到達したチームが勝利となります。</li>
+      <li>制限時間終了後、どのチームも0匹だった場合サドンデスとなります。<br>
+          その後、最も早く1匹釣り上げたチームが勝利です。</li>
+    </ol>
+  </div>
 
-<h2>◆釣り方</h2>
+  <div class="section">
+    <h2>◆ 賞金 💰</h2>
+    <label for="totalPrize">賞金総額（ギル）:</label>
+    <input type="number" id="totalPrize" value="1000000" style="width: 150px;">
+    <label for="participantCount">参加人数:</label>
+    <select id="participantCount">
+      <option value="4">4名</option>
+      <option value="5">5名</option>
+      <option value="6">6名</option>
+      <option value="7">7名</option>
+      <option value="8">8名</option>
+      <option value="9">9名</option>
+      <option value="10">10名</option>
+      <option value="11">11名</option>
+      <option value="12">12名</option>
+    </select>
+    <button onclick="calculatePrize()">計算</button>
+
+    <table>
+      <thead>
+        <tr>
+          <th>勝者</th>
+          <th>それ以外</th>
+          <th>優勝チーム賞金</th>
+          <th>参加賞</th>
+        </tr>
+      </thead>
+      <tbody id="resultBody"></tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>◆ チーム分け 🧑‍🤝‍🧑</h2>
+    <p>A. <strong>ダイスで上位者から順にメンバー指名制</strong><br>
+    「/random」コマンドで出た数値が大きかった人から順に相方を指名する。</p>
+
+    <p>B. <strong>ダイスで完全ランダム</strong><br>
+    「/random」コマンドで出た数値の昇順で決定する。<br>
+    例：900 800 700 600 → 900＆800、700＆600</p>
+
+    <p>C. <strong>GP差順</strong><br>
+    参加メンバー全員がGP（ドーピング前）を自己申告し、最も多い人と少ない人、2番目に多い人と2番目に少ない人…で組む。</p>
+
+    <p><strong>参加者人数とチーム構成：</strong><br>
+      4名：2 vs 2<br>
+      5名：2 vs 2 vs <span class="solo">1</span><br>
+      6名：2 vs 2 vs 2<br>
+      7名：2 vs 2 vs 2 vs <span class="solo">1</span><br>
+      8名：2 vs 2 vs 2 vs 2<br>
+      9名：3 vs 3 vs 3<br>
+      10名：2 vs 2 vs 2 vs 2 vs 2<br>
+      11名：2 vs 2 vs 2 vs 2 vs 2 vs <span class="solo">1</span><br>
+      12名：2 vs 2 vs 2 vs 2 vs 2 vs 2</p>
+  </div>
+
+  <div class="section">
+    <h2>◆ その他ルール 📜</h2>
+    <ul>
+      <li>
+          釣り上げ成功がわかりやすいように「/sit」コマンドで座って釣る<br>
+          <img src="座る.png" alt="座る" style="width:75px; margin-top: 0.5em;">
+      </li>
+      <li>
+          餌はハニーワーム（FC支給）を使用 ※1人100個支給<br>
+          <img src="ハニーワーム.png" alt="ハニーワーム" style="width:75px; margin-top: 0.5em;">
+      </li>
+      <li>
+          GP増強の為の食事等ドーピングは自由<br>
+          <img src="スタッフドピーマン.png" alt="スタッフドピーマン" style="width:75px; margin-top: 0.5em;">
+          <img src="ナシゴレン.png" alt="ナシゴレン" style="width:75px; margin-top: 0.5em;">
+      </li>
+    </ul>
+  </div>
+
+<span style="font-size: 20px;">★これ以降はメイトリアークの釣り方がわからない！漁師スキル何使えばいいのかわからない！って方向けの解説になります。★</span>
+  
+  <h2>◆ 釣り方 🎣</h2>
 <ol>
     <li>クルザス中央高地の「調査隊の氷穴」に向かう。</li>
-    <img src="https://i.imgur.com/7sY9xTo.png" alt="調査隊の氷穴" style="width:600px; margin-top: 0.5em;">
+    <img src="調査隊の氷穴map.png" alt="調査隊の氷穴" style="width:600px; margin-top: 0.5em;">
     <Br>
-    <img src="https://i.imgur.com/7t6xYcf.png" alt="調査隊の氷穴" style="width:600px; margin-top: 0.5em;">
+    <img src="調査隊の氷穴.png" alt="調査隊の氷穴" style="width:600px; margin-top: 0.5em;">
     <li>ハニーワームを使って「アバラシアスメルト」を釣り上げる。</li>
-    <img src="https://i.imgur.com/VmKc2xS.png" alt="ハニーワーム" style="width:50px; margin-top: 0.5em;">
-    <span style="font-size: 24px;">→</span>
-    <img src="https://i.imgur.com/fGBDBbc.png" alt="アバラシアスメルト" style="width:50px; margin-top: 0.5em;">
+    <img src="ハニーワーム.png" alt="ハニーワーム" style="width:75px; margin-top: 0.5em;">
+    <img src="矢印.png" alt="矢印" style="width:50px; margin-top: 0.5em;">
+    <img src="アバラシアスメルト.png" alt="アバラシアスメルト" style="width:75px; margin-top: 0.5em;">
 
     <li>「アバラシアスメルト」を泳がせ釣りして「メイトリアーク」を釣り上げる。</li>
-    <img src="https://i.imgur.com/fGBDBbc.png" alt="アバラシアスメルト" style="width:50px; margin-top: 0.5em;">
-    <span style="font-size: 24px;">→</span>
-    <img src="https://i.imgur.com/pWzhMr4.png" alt="メイトリアーク" style="width:50px; margin-top: 0.5em;">
+    <img src="アバラシアスメルト.png" alt="アバラシアスメルト" style="width:75px; margin-top: 0.5em;">
+    <img src="矢印.png" alt="矢印" style="width:50px; margin-top: 0.5em;">
+    <img src="メイトリアーク.png" alt="メイトリアーク" style="width:75px; margin-top: 0.5em;">
 </ol>
 
-<h2>◆泳がせ釣りのコツ</h2>
+<h2>◆ 泳がせ釣りのコツ 🐟</h2>
 <ol>
     <li>
         <strong>【GPを消費】</strong>ペーシェンスⅡとプレシジョンフッキングを使ってラージサイズを狙う。<br>
-        <img src="https://i.imgur.com/2MdIXBC.png" alt="ペーシェンスⅡ"><br>
-        <img src="https://i.imgur.com/nPtddZ6.png" alt="プレシジョンフッキング"><br>
+        <img src="ペーシェンスⅡ.png" alt="ペーシェンスⅡ"><br>
+        <img src="プレシジョンフッキング.png" alt="プレシジョンフッキング"><br>
         <span class="note">※普通のペーシェンスはゴミ。使用は非推奨。</span><br>
         <span class="important">ヌシは！！！だが使うスキルは「プレシジョンフッキング」の方なので注意！</span>
     </li>
     <br>
     <li>
         <strong>【BFを消費】</strong>熟漁の技を使ってノーマルサイズでも泳がせ釣りを狙う。<br>
-        <img src="https://i.imgur.com/uHWs2vq.png" alt="熟漁の技"><br>
+        <img src="熟漁の技.png" alt="熟漁の技"><br>
         <span class="note">※ペーシェンスⅡと交互に使うとGPがちょうどよく戻る。</span>
     </li>
     <br>
     <li>
         <strong>その他テクニック</strong><br>
         ・熟漁の妙案を使って泳がせ釣りストックが可能。<br>
-         <img src="https://i.imgur.com/oJuwz7I.png" alt="熟漁の妙案"><br>
+         <img src="熟漁の妙案.png" alt="熟漁の妙案"><br>
          ＜実演＞<br>
-         <img src="https://i.imgur.com/NkZxhPa.png" alt="対象が釣れたよ"><br>
+         <img src="対象が釣れたよ.png" alt="対象が釣れたよ"><br>
          対象が釣れた時に<br>
-         <img src="https://i.imgur.com/oJH7Xx0.png" alt="スキルが光ってるよ"><br>
+         <img src="スキルが光ってるよ.png" alt="スキルが光ってるよ"><br>
          スキルが光るので、GP100を消費して使える<br>
-         <img src="https://i.imgur.com/dwtrU40.png" alt="熟漁の妙案実演"><br>
+         <img src="熟漁の妙案実演.png" alt="熟漁の妙案実演" style="width:600px; margin-top: 0.5em;"><br>
          ごそごそっ…ってして<br>
-         <img src="https://i.imgur.com/NEhFByU.png" alt="熟漁の妙案ストック"><br>
+         <img src="熟漁の妙案ストック.png" alt="熟漁の妙案ストック" style="width:600px; margin-top: 0.5em;"><br>
          餌のところに追加されるのです。<br>
         ・泳がせ対象を釣った時、熟漁の妙案＋セイムキャストで連続釣りが可能。<br>
-         <img src="https://i.imgur.com/LnZg2VM.png" alt="セイムキャスト"><br>
+         <img src="セイムキャスト.png" alt="セイムキャスト"><br>
          対象を釣り上げる→熟漁の妙案でストック→セイムキャストを使用→もう一匹GET!<br>
         <span class="note">※ただし、一連の動作にGP450使うのでご利用は計画的に。</span><br>
         ・釣り上げモーションは長い。いらない魚は竿上げでキャンセルも可。<br>
-        <img src="https://i.imgur.com/mCM6qrm.png" alt="竿上げ"><br>
+        <img src="竿上げ.png" alt="竿上げ"><br>
         <span class="note">※狙うのは！と！！！のみ。「！！」はあまり重要ではない。</span><br>
         <span class="note">※ペーシェンスⅡ中はBFが溜まるが、熟漁の技中は外道は完全に無駄になる。</span>
     </li>
 </ol>
+
+<h2>◆ スキル一覧 📖</h2>
+<style>
+  .skill-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .skill-icon-name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    min-width: 280px; /* 画像+スキル名幅 */
+  }
+
+  .skill-icon-name img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+  }
+
+  .skill-name {
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  .skill-desc {
+    flex: 1;
+  }
+</style>
+</head>
+<body>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="01.png" alt="釣り餌の画像" />
+    <div class="skill-name">【釣り餌】</div>
+  </div>
+  <div class="skill-desc">餌を選ぶスキル。<br>後述する熟漁の妙案でストックした泳がせ魚を選ぶときにも使用する。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="02.png" alt="キャスティングの画像" />
+    <div class="skill-name">【キャスティング】</div>
+  </div>
+  <div class="skill-desc">釣りを開始するスキル。<br>後述する熟漁の妙案でストックした泳がせ魚を選んで使う際はこちらで開始する。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="03.png" alt="フッキングの画像" />
+    <div class="skill-name">【フッキング】</div>
+  </div>
+  <div class="skill-desc">釣り上げスキル。<br>ペーシェンスⅡはこちらで釣りあげようとすると高確率で失敗するので注意。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="04.png" alt="中断の画像" />
+    <div class="skill-name">【中断】</div>
+  </div>
+  <div class="skill-desc"><span style="color: red; font-weight: bold;">地雷スキル。</span><br>使うとすべてがキャンセルされるのでホットバーから外すことを推奨。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="05.png" alt="キャストライトの画像" />
+    <div class="skill-name">【キャストライト】</div>
+  </div>
+  <div class="skill-desc">チカチカするだけのお遊びスキル。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="06.png" alt="竿上げの画像" />
+    <div class="skill-name">【竿上げ】</div>
+  </div>
+  <div class="skill-desc">掛かった魚を釣らずに竿だけ上げるスキル。<br>いらない魚がかかったときのキャンセルに有効。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="07.png" alt="撒き餌の画像" />
+    <div class="skill-name">【撒き餌】</div>
+  </div>
+  <div class="skill-desc">魚が掛かるまでの時間を短縮するスキル。<br>GPに余裕があるなら使ってもいいし使わなくてもいい。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="08.png" alt="スニークの画像" />
+    <div class="skill-name">【スニーク】</div>
+  </div>
+  <div class="skill-desc">勝手にかかるのでホットバーから外していい。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="09.png" alt="ペーシェンスの画像" />
+    <div class="skill-name">【ペーシェンス】</div>
+  </div>
+  <div class="skill-desc">ペーシェンスⅡがあればいらないスキル。<br>時間も短いしラージサイズじゃないときもあるしホントにいらない。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="10.png" alt="ストロングフッキングの画像" />
+    <div class="skill-name">【ストロングフッキング】</div>
+  </div>
+  <div class="skill-desc">ペーシェンスⅡの効果中に使う釣り上げスキル。<br>！！が掛かったときはこちらを使うが今回のターゲットには全く関係ない。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="11.png" alt="プレシジョンフッキングの画像" />
+    <div class="skill-name">【プレシジョンフッキング】</div>
+  </div>
+  <div class="skill-desc">ペーシェンスⅡの効果中に使う釣り上げスキル。<br>！が掛かったときはこちらを使う。<span style="color: red; font-weight: bold;">※メイトリアークは！！！だがこちらで釣り上げる。</span></div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="12.png" alt="サリャクの恩寵の画像" />
+    <div class="skill-name">【サリャクの恩寵】</div>
+  </div>
+  <div class="skill-desc">ラージサイズの魚を釣ったときに溜まるBF(ビッグフィッシャー)を3消費して使うスキル。<br>GP回復は便利だが本イベントでは熟漁の技にBFを回したい。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="13.png" alt="リリースの画像" />
+    <div class="skill-name">【リリース】</div>
+  </div>
+  <div class="skill-desc">いらない魚を釣ったときに逃がすスキル。<br>その釣りを辞めるまでは一度逃がした魚は釣りあげ次第逃がし続ける。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="14.png" alt="リリース一覧表示の画像" />
+    <div class="skill-name">【リリース一覧表示】</div>
+  </div>
+  <div class="skill-desc">リリースする魚を選ぶスキル。<br>アバラシアスメルトやメイトリアークを選ばないようにだけ注意。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="15.png" alt="泳がせ釣りの画像" />
+    <div class="skill-name">【泳がせ釣り】</div>
+  </div>
+  <div class="skill-desc">ラージサイズのアバラシアスメルトを釣ったときに使うスキル。<br>熟漁の妙案でストックした場合はこちらではなくキャスティングを使用する。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="16.png" alt="引掻釣りの画像" />
+    <div class="skill-name">【引掻釣り】</div>
+  </div>
+  <div class="skill-desc"><span style="color: blue; font-weight:">本イベントの対象には全く関係ない。</span></div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="17.png" alt="熟漁の技の画像" />
+    <div class="skill-name">【熟漁の技】</div>
+  </div>
+  <div class="skill-desc">ラージサイズの魚を釣ったときに溜まるBF(ビッグフィッシャー)を5消費して使うスキル。<br>一定時間ノーマルサイズのアバラシアスメルトでも泳がせ釣りや熟漁の妙案が使えるようになる。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="18.png" alt="収集品採集の画像" />
+    <div class="skill-name">【収集品採集】</div>
+  </div>
+  <div class="skill-desc"><span style="color: blue; font-weight:">本イベントの対象には全く関係ない。</span></div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="19.png" alt="フィッシュアイの画像" />
+    <div class="skill-name">【フィッシュアイ】</div>
+  </div>
+  <div class="skill-desc"><span style="color: blue; font-weight:">本イベントの対象には全く関係ない。</span></div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="20.png" alt="ペーシェンスⅡの画像" />
+    <div class="skill-name">【ペーシェンスⅡ】</div>
+  </div>
+  <div class="skill-desc">釣り上げ成功率を下げる代わりに釣れる魚の殆どがラージサイズになるスキル。<br>GPが少ないときに使うと大変なことになる。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="21.png" alt="ギギングの画像" />
+    <div class="skill-name">【ギギング】</div>
+  </div>
+  <div class="skill-desc"><span style="color: blue; font-weight:">刺突漁用スキルなので本イベントでは使わない。</span></div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="22.png" alt="泳がせ釣りⅡの画像" />
+    <div class="skill-name">【泳がせ釣りⅡ】</div>
+  </div>
+  <div class="skill-desc">ノーマルサイズのアバラシアスメルトで泳がせ釣りができるスキル。<br>GPを消費するしリキャストも長いので過信は禁物。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="23.png" alt="ベテラントレードの画像" />
+    <div class="skill-name">【ベテラントレード】</div>
+  </div>
+  <div class="skill-desc"><span style="color: blue; font-weight:">刺突漁用スキルなので本イベントでは使わない。</span></div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="24.png" alt="選魚眼の画像" />
+    <div class="skill-name">【選魚眼】</div>
+  </div>
+  <div class="skill-desc"><span style="color: blue; font-weight:">刺突漁用スキルなので本イベントでは使わない。</span></div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="25.png" alt="ダブルフッキングの画像" />
+    <div class="skill-name">【ダブルフッキング】</div>
+  </div>
+  <div class="skill-desc"><span style="color: blue; font-weight:">本イベントの対象には全く関係ない。</span><br>ヌシに使っても２匹は釣れない…はず？試したことない。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="26.png" alt="サルベージの画像" />
+    <div class="skill-name">【サルベージ】</div>
+  </div>
+  <div class="skill-desc"><span style="color: blue; font-weight:">刺突漁用スキルなので本イベントでは使わない。</span></div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="27.png" alt="ネイチャーバウンティの画像" />
+    <div class="skill-name">【ネイチャーバウンティ】</div>
+  </div>
+  <div class="skill-desc"><span style="color: blue; font-weight:">刺突漁用スキルなので本イベントでは使わない。</span></div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="28.png" alt="トレードリリースの画像" />
+    <div class="skill-name">【トレードリリース】</div>
+  </div>
+  <div class="skill-desc">釣った魚を次回別の魚を釣り上げるまで釣れなくするスキル。<br>他のヌシ釣りでは重要なスキルだが、アバラシアスメルトは非常に釣れやすいので出番はないと思われる。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="29.png" alt="ホールドブレスの画像" />
+    <div class="skill-name">【ホールドブレス】</div>
+  </div>
+  <div class="skill-desc"><span style="color: blue; font-weight:">刺突漁用スキルなので本イベントでは使わない。</span></div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="30.png" alt="セイムキャストの画像" />
+    <div class="skill-name">【セイムキャスト】</div>
+  </div>
+  <div class="skill-desc">釣った魚をもう一度確定で掛からせるスキル。<br>泳がせ釣りで釣る魚には使えない。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="31.png" alt="大物狙いの画像" />
+    <div class="skill-name">【大物狙い】</div>
+  </div>
+  <div class="skill-desc">次に釣る魚を確定でラージサイズにするスキル。<br>今回のイベントでは使えなくはないが活躍するタイミングは非常に限定的。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="32.png" alt="エレクトリックカレントの画像" />
+    <div class="skill-name">【エレクトリックカレント】</div>
+  </div>
+  <div class="skill-desc"><span style="color: blue; font-weight:">刺突漁用スキルなので本イベントでは使わない。</span></div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="33.png" alt="ダブルフッキングの画像" />
+    <div class="skill-name">【ダブルフッキング】</div>
+  </div>
+  <div class="skill-desc"><span style="color: blue; font-weight:">本イベントの対象には全く関係ない。</span><br>ヌシに使っても３匹は釣れない…はず？試したことない。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="34.png" alt="熟漁の妙案の画像" />
+    <div class="skill-name">【熟漁の妙案】</div>
+  </div>
+  <div class="skill-desc">釣った泳がせ釣り対象の魚を釣り餌として３匹までストックできる神スキル。<br>ただし釣りをやめると全部逃がしてしまうので移動キーで中断してしまわないように注意。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="35.png" alt="大物の知識の画像" />
+    <div class="skill-name">【大物の知識】</div>
+  </div>
+  <div class="skill-desc"><span style="color: blue; font-weight:">本イベントの対象には全く関係ない。</span></div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="36.png" alt="アンビシャスルアーの画像" />
+    <div class="skill-name">【アンビシャスルアー】</div>
+  </div>
+  <div class="skill-desc"><span style="color: blue; font-weight:">本イベントの対象には全く関係ない。</span><br>！！の魚を掛かりやすくするスキル。つまり使わないほうがいい。</div>
+</div>
+
+<div class="skill-item">
+  <div class="skill-icon-name">
+    <img src="37.png" alt="モデストルアーの画像" />
+    <div class="skill-name">【モデストルアー】</div>
+  </div>
+  <div class="skill-desc">！の魚を掛かりやすくするスキル。<br>これ使わなくてもアバラシアスメルトはよく掛かる。</div>
+</div>
+
+  <script>
+    function calculatePrize() {
+      const totalPrize = parseInt(document.getElementById('totalPrize').value, 10);
+      const participantCount = parseInt(document.getElementById('participantCount').value, 10);
+      const tableBody = document.getElementById('resultBody');
+      tableBody.innerHTML = '';
+
+      const patterns = [];
+
+      if ([4, 6, 8, 10, 12].includes(participantCount)) {
+        patterns.push({ winners: 2 });
+      } else if (participantCount === 9) {
+        patterns.push({ winners: 3 });
+      } else if ([5, 7, 11].includes(participantCount)) {
+        patterns.push({ winners: 1 });
+        patterns.push({ winners: 2 });
+      }
+
+      patterns.forEach(pattern => {
+        const losers = participantCount - pattern.winners;
+        const winnerShare = Math.floor((totalPrize * 0.9) / pattern.winners);
+        const loserShare = Math.floor((totalPrize * 0.1) / losers);
+
+        const row = `<tr>
+          <td>${pattern.winners}</td>
+          <td>${losers}</td>
+          <td>${winnerShare.toLocaleString()} ギル</td>
+          <td>${loserShare.toLocaleString()} ギル</td>
+        </tr>`;
+
+        tableBody.insertAdjacentHTML('beforeend', row);
+      });
+    }
+  </script>
 
 </body>
 </html>
